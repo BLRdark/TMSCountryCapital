@@ -17,7 +17,7 @@ public class Country implements Serializable {
     private String name;
 
     @OneToOne
-    @JoinColumn(name = "ID", referencedColumnName = "ID")
+    @JoinColumn(name = "CAPITAL", referencedColumnName = "ID")
     private Capital capital;
 
     public Country(Integer id, String name, Capital capital) {
@@ -35,7 +35,7 @@ public class Country implements Serializable {
     }
 
     public void setId(Integer id) {
-        this.id =id;
+        this.id = id;
     }
 
     public String getName() {
@@ -59,4 +59,5 @@ public class Country implements Serializable {
     public String toString() {
         return id + " " + name + " " + capital.getName();
     }
+
 }

@@ -40,6 +40,30 @@ public class HibernateQuery {
         return countryList;
     }
 
+    public List<Capital> getCapitalList(){
+        Session session = sessionFactory.openSession();
+
+        session.get(Capital.class, 1);
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+
+        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(Capital.class);
+
+        Root<Country> root = criteriaQuery.from(Capital.class);
+
+        criteriaQuery.select(root);
+
+        Query query = session.createQuery(criteriaQuery);
+
+        List<Capital> capitalList = query.getResultList();
+
+        session.close();
+
+        return capitalList;
+    }
+
+
+
     public void pushCapital(String name){
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();

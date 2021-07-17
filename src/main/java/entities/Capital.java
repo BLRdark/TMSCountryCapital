@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "capital")
-public class Capital{
+public class Capital {
 
     @Column(name = "ID")
     @Id
@@ -42,4 +42,5 @@ public class Capital{
     public String toString() {
         return id + " " + name;
     }
+
 }
