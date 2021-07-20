@@ -1,11 +1,9 @@
 package controller;
 
-import dnl.utils.text.table.TextTable;
 import entities.Capital;
 import entities.Country;
 import hibernate.HibernateQuery;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class MainUtil {
@@ -15,16 +13,64 @@ public class MainUtil {
     public void addCity() {
         System.out.println("Enter city name: ");
         String s = new Scanner(System.in).nextLine();
-        hq.pushCapital(s);
+        Capital capital =  new Capital();
+        capital.setName(s);
+        hq.pushCapital(capital);
     }
 
     public void addCountry() {
         System.out.println("Enter country name: ");
         String countryName = new Scanner(System.in).nextLine();
+        Country country = new Country();
+        country.setName(countryName);
         System.out.println("Choose capital (0 for empty capital cell): ");
         printCapitalList();
         int f = new Scanner(System.in).nextInt();
-        hq.pushCountry(countryName, getCapitalById(f));
+            country.setCapital(getCapitalById(f));
+            hq.pushCountry(country);
+    }
+
+    public void updateCountry(){
+        System.out.println("Select country you want to update");
+        printCountryList();
+        int k = new Scanner(System.in).nextInt();
+        Country temp = getCountryById(k);
+        System.out.println("1 - change country name \n2 - change capital");
+        int z = new Scanner(System.in).nextInt();
+        switch (z){
+            case 1:
+                System.out.println("Enter new name for country " + temp.getName());
+                String newName = new Scanner(System.in).nextLine();
+                temp.setName(newName);
+                hq.updateObj(temp);
+                break;
+            case 2:
+                System.out.println("1 - choose existing capital \n2 - set a new one");
+                int p = new Scanner(System.in).nextInt();
+                switch (p){
+                    case 1:
+                        printCapitalList();
+                    {
+                        int s = new Scanner(System.in).nextInt();
+                        temp.setCapital(getCapitalById(s));
+                        System.out.println("New capital of " + temp.getName() + " is now " + temp.getCapital().getName());
+                        hq.updateObj(temp);
+                    }
+                    break;
+                    case 2:
+                        System.out.println("Enter city name: ");
+                        String s = new Scanner(System.in).nextLine();
+                        Capital capital =  new Capital();
+                        capital.setName(s);
+                        hq.pushCapital(capital);
+                        temp.setCapital(capital);
+                        System.out.println("New capital of " + temp.getName() + " is now " + temp.getCapital().getName());
+                        hq.updateObj(temp);
+                        break;
+                    default:
+                        System.out.println("Incorrect input");
+                }
+        }
     }
 
     public void printMixedList() {
@@ -62,11 +108,34 @@ public class MainUtil {
 
     private Country getCountryById(Integer id) {
         for (Country country : hq.getCountryList()) {
-            if (country.getCapital().getId() == id) {
+            if (country.getId() == id) {
                 return country;
             }
         }
         return null;
+    }
+
+    public void delete(){
+        System.out.println("1 - delete country\n2 - delete capital: \n");
+        int k = new Scanner(System.in).nextInt();
+        switch (k){
+            case 1:{
+                System.out.println("Select country: \n");
+                printCountryList();
+                int f = new Scanner(System.in).nextInt();
+                hq.removeObj(getCountryById(f));
+            }
+                break;
+            case 2:{
+                System.out.println("Select capital: \n");
+                printCapitalList();
+                int f = new Scanner(System.in).nextInt();
+                hq.removeObj(getCapitalById(f));
+            }
+            break;
+            default:
+                System.out.println("Incorrect input");
+        }
     }
 
 

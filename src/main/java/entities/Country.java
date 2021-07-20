@@ -57,7 +57,7 @@ public class Country implements Serializable {
 
     @Override
     public String toString() {
-        return id + " " + name + " " + capital.getName();
+        return id + " " + name + " " + (capital == null ? " " : capital.getName()); //FIX NULL POINTER EXCEPTION WHEN CAPITAL IS NULL!
     }
 
 }

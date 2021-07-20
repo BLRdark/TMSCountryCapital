@@ -14,11 +14,11 @@ import java.util.List;
 public class HibernateQuery {
     private SessionFactory sessionFactory;
 
-    public HibernateQuery(){
+    public HibernateQuery() {
         sessionFactory = HibernateUtil.getSessionFactory();
     }
 
-    public List<Country> getCountryList(){
+    public List<Country> getCountryList() {
         Session session = sessionFactory.openSession();
 
         session.get(Country.class, 1);
@@ -40,7 +40,7 @@ public class HibernateQuery {
         return countryList;
     }
 
-    public List<Capital> getCapitalList(){
+    public List<Capital> getCapitalList() {
         Session session = sessionFactory.openSession();
 
         session.get(Capital.class, 1);
@@ -63,38 +63,48 @@ public class HibernateQuery {
     }
 
 
-
-    public void pushCapital(String name){
+    public void pushCapital(Capital capital) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
 
-        //Add new Employee object
-        Capital capital = new Capital();
-        capital.setName(name);
-        //Save the employee in database
         session.save(capital);
 
-        //Commit the transaction
         session.getTransaction().commit();
     }
 
-    public void pushCountry(String name, Capital capital){
+    public void pushCountry(Country country) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
 
-        //Add new Employee object
-        Country country = new Country();
-        country.setName(name);
-        if(capital == null) {
-            capital = new Capital();
-            capital.setName(" ");
-        }
-        country.setCapital(capital);
-        //Save the employee in database
         session.save(country);
 
-        //Commit the transaction
         session.getTransaction().commit();
         session.close();
+    }
+
+    public void updateObj(Object obj) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.update(obj);
+        session.getTransaction().commit();
+    }
+
+    public void removeObj(Object obj) {
+        Session session = sessionFactory.openSession();
+
+        session.beginTransaction();
+        if (obj instanceof Capital) {
+            for (Country country : getCountryList()) {
+                if (country.getCapital() == null) {
+                    continue;
+                } else if (country.getCapital().getName().equals(((Capital) obj).getName())) {
+                    country.setCapital(null);
+                   session.update(country);
+                }
+            }
+        }
+
+        session.remove(obj);
+        session.getTransaction().commit();
     }
 }

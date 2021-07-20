@@ -1,5 +1,7 @@
 package controller;
 
+import entities.Country;
+
 import java.util.Scanner;
 
 public class Main {
@@ -43,6 +45,14 @@ public class Main {
                     }
                     break;
                 }
+                case 3:
+                    mu.updateCountry();
+                    break;
+                case 4:
+                    mu.delete();
+                    break;
+                default:
+                    System.out.println("Incorrect input");
 
             }
         }
